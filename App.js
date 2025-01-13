@@ -45,7 +45,7 @@ export default function App() {
   const capturePhotoAndAudio = async () => {
     try {
       if (!hasPermission || !hasMicPermission) {
-        await checkPermissions()
+        return
       }
       if (isRecording) {
         // Stop audio recording
@@ -108,13 +108,13 @@ export default function App() {
   //   );
   // }
 
-  // if (!device) {
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text style={styles.text}>Loading camera...</Text>
-  //     </View>
-  //   );
-  // }
+  if (!device) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Loading camera...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
