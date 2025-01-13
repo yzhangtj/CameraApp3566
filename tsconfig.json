@@ -1,0 +1,10 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    // Ensure TS knows it's dealing with React Native JSX
+    "jsx": "react-native",
+
+    // Optionally skip .d.ts checks in node_modules if you get random type errors
+    "skipLibCheck": true
+  }
+}
