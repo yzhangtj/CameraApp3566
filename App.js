@@ -44,46 +44,47 @@ export default function App() {
 
   const capturePhotoAndAudio = async () => {
     try {
-      if (hasPermission && hasMicPermission) {
-        if (isRecording) {
-          // Stop audio recording
-          console.log('Stopping audio recording...');
-          const result = await audioRecorderPlayer.stopRecorder();
-          setIsRecording(false);
-  
-          // Read audio file as binary (base64)
-          const audioBinary = await RNFS.readFile(result, 'base64');
-          setAudioBinary(audioBinary);
-          console.log('Audio binary (base64):', audioBinary);
-        } else {
-          // Ensure the camera reference is valid
-          if (!cameraRef.current) {
-            console.error('Camera reference is null . Cannot capture photo.');
-            return;
-          }
-  
-          // Capture photo and get base64 binary data
-          try {
-            console.log('Capturing photo...');
-            const photo = await cameraRef.current.takeSnapshot({
-              quality: 0.5,
-              base64: true,
-            })
-            console.log('Get photo in raw: ', photo);
-            // Set the photo binary data
-            const img = await RNFS.readFile(photo.path, 'base64');
-            console.log('IMG binary (base64):', img);
-          } catch (error) {
-            console.error('Error capturing photo:', error);
-            setErrorMessage(`Error:${error.message}`);
-          }
-  
-          // Start audio recording
-          console.log('Starting audio recording...');
-          const audioUri = `${RNFS.DocumentDirectoryPath}/audio.m4a`;
-          await audioRecorderPlayer.startRecorder(audioUri);
-          setIsRecording(true);
+      if (!hasPermission || !hasMicPermission) {
+        await checkPermissions()
+      }
+      if (isRecording) {
+        // Stop audio recording
+        console.log('Stopping audio recording...');
+        const result = await audioRecorderPlayer.stopRecorder();
+        setIsRecording(false);
+
+        // Read audio file as binary (base64)
+        const audioBinary = await RNFS.readFile(result, 'base64');
+        setAudioBinary(audioBinary);
+        console.log('Audio binary (base64):', audioBinary);
+      } else {
+        // Ensure the camera reference is valid
+        if (!cameraRef.current) {
+          console.error('Camera reference is null . Cannot capture photo.');
+          return;
         }
+
+        // Capture photo and get base64 binary data
+        try {
+          console.log('Capturing photo...');
+          const photo = await cameraRef.current.takeSnapshot({
+            quality: 0.5,
+            base64: true,
+          })
+          console.log('Get photo in raw: ', photo);
+          // Set the photo binary data
+          const img = await RNFS.readFile(photo.path, 'base64');
+          console.log('IMG binary (base64):', img);
+        } catch (error) {
+          console.error('Error capturing photo:', error);
+          setErrorMessage(`Error:${error.message}`);
+        }
+
+        // Start audio recording
+        console.log('Starting audio recording...');
+        const audioUri = `${RNFS.DocumentDirectoryPath}/audio.m4a`;
+        await audioRecorderPlayer.startRecorder(audioUri);
+        setIsRecording(true);
       }
     } catch (err) {
       console.error('Error during photo or audio capture:', err);
@@ -91,13 +92,13 @@ export default function App() {
     }
   };
 
-  if (!hasPermission) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>No access to camera</Text>
-      </View>
-    );
-  }
+  // if (!hasPermission) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.text}>No access to camera</Text>
+  //     </View>
+  //   );
+  // }
   
   // if (!hasMicPermission) {
   //   return (
@@ -107,13 +108,13 @@ export default function App() {
   //   );
   // }
 
-  if (!device) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Loading camera...</Text>
-      </View>
-    );
-  }
+  // if (!device) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.text}>Loading camera...</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
