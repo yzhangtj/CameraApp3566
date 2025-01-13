@@ -99,13 +99,13 @@ export default function App() {
     );
   }
   
-  if (!hasMicPermission) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>No access to mic</Text>
-      </View>
-    );
-  }
+  // if (!hasMicPermission) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.text}>No access to mic</Text>
+  //     </View>
+  //   );
+  // }
 
   if (!device) {
     return (
