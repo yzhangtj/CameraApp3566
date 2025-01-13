@@ -60,16 +60,21 @@ export default function App() {
         }
 
         // Capture photo and get base64 binary data
-        console.log('Capturing photo...');
-        const photo = await cameraRef.current.takePhoto({
-          qualityPrioritization: 'speed',
-          base64: true, // Return photo as base64
-        });
-        console.log('Get photo in binary');
-        // Set the photo binary data
-        const photoBinary = photo.base64;
-        setPhotoBinary(photoBinary);
-        console.log('Photo binary (base64):', photoBinary);
+        try {
+          console.log('Capturing photo...');
+          const photo = await cameraRef.current.takePhoto({
+            qualityPrioritization: 'speed',
+            base64: true, // Return photo as base64
+          });
+          console.log('Get photo in binary');
+          // Set the photo binary data
+          const photoBinary = photo.base64;
+          setPhotoBinary(photoBinary);
+          console.log('Photo binary (base64):', photoBinary);
+        } catch (error) {
+          console.error('Error capturing photo:', error);
+          setErrorMessage(`Error:${error.message}`);
+        }
 
         // Start audio recording
         console.log('Starting audio recording...');
@@ -82,11 +87,6 @@ export default function App() {
       Alert.alert('Error', 'An error occurred during photo or audio capture.');
     }
   };
-
-  const handleInitialized = () => {
-    setInitialized(True);
-    console.log('Camera initialized and ready to use')
-  }
 
   if (!hasPermission) {
     return (
@@ -111,7 +111,6 @@ export default function App() {
         device={device}
         isActive={true}
         ref={(ref) => (cameraRef.current = ref)}
-        onInitialized={handleInitialized}
         photo={true} // Enable photo capture
       />
       <Button
