@@ -44,9 +44,8 @@ export default function App() {
 
   const capturePhotoAndAudio = async () => {
     try {
-      if (!hasPermission || !hasMicPermission) {
-        return
-      }
+      console.log('cam permission: ', hasPermission);
+      console.log('mic permission: ', hasMicPermission);
       if (isRecording) {
         // Stop audio recording
         console.log('Stopping audio recording...');
